@@ -39,14 +39,16 @@
 --Data Source(here we can have multiple sources separated by a comma). A publication can have multiple records from different sources. 
 
 --DECLARE @Start_Year INT = 1900;
---DECLARE @Group_IDs NVARCHAR(10) = '1';
---DECLARE @User_IDs NVARCHAR(10) = '1';
+--DECLARE @Group_IDs NVARCHAR(10) = '2';
+--DECLARE @User_IDs NVARCHAR(10) = NULL;
+--DECLARE @DATE_1 DATE = NULL
+--DECLARE @DATE_2 DATE = NULL
 -- DECLARE THE NEEDED VARIABLES:
 
 -- Get the ID of Recruitment Method label scheme
 DECLARE @RecruitmentMethodSchemeID INT = (SELECT ID FROM [Label Scheme] WHERE [Name]='c-recruitment-method')
 -- Get the ID of OA Faculty Policy
-DECLARE @OAFacultyPolicyID INT = (SELECT ID FROM [OA Policy] WHERE [Name] = 'Faculty Policy')
+DECLARE @OAFacultyPolicyID INT = (SELECT ID FROM [OA Scheme] WHERE [Display Name] = 'Faculty Policy')
 -- Getthe DSpace source ID
 DECLARE @DSpaceSourceID INT = (SELECT ID FROM [Publication Source] s WHERE s.[Name Identifier]='dspace')
 
@@ -104,8 +106,8 @@ JOIN [Publication Record] pRecord
 LEFT JOIN [Publication Label] pLabel
 	ON p.[ID] = pLabel.[Publication ID] AND pLabel.[Scheme ID] = @RecruitmentMethodSchemeID
 -- Join with OA Policy to check if the publication is part of Faculty Policy
-LEFT JOIN [Publication OA Policy] pOAPolicy
-	ON p.[ID] = pOAPolicy.[Publication ID] AND pOAPolicy.[OA Policy ID] = @OAFacultyPolicyID
+LEFT JOIN [Publication OA Scheme State] pOAPolicy
+	ON p.[ID] = pOAPolicy.[Publication ID] AND pOAPolicy.[OA Scheme ID] = @OAFacultyPolicyID
 -- Use the below line to filter by DSpace creation year. The value is set in a SSRS parameter
 WHERE pRecord.[record-created-at-source-date] &gt;= @Date_1 AND pRecord.[record-created-at-source-date] &lt;= @Date_2
 	--where YEAR(pRecord.[record-created-at-source-date]) &gt; @Start_Year 
