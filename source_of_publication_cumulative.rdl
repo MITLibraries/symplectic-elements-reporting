@@ -43,7 +43,7 @@
 -- Get the ID of Recruitment Method label scheme
 DECLARE @RecruitmentMethodSchemeID INT = (SELECT ID FROM [Label Scheme] WHERE [Name]='c-recruitment-method')
 -- Get the ID of OA Faculty Policy
-DECLARE @OAFacultyPolicyID INT = (SELECT ID FROM [OA Policy] WHERE [Name] = 'Faculty Policy')
+DECLARE @OAFacultyPolicyID INT = (SELECT ID FROM [OA Scheme] WHERE [Display Name] = 'Faculty Policy')
 -- Getthe DSpace source ID
 DECLARE @DSpaceSourceID INT = (SELECT ID FROM [Publication Source] s WHERE s.[Name Identifier]='dspace')
 
@@ -101,10 +101,10 @@ JOIN [Publication Record] pRecord
 LEFT JOIN [Publication Label] pLabel
 	ON p.[ID] = pLabel.[Publication ID] AND pLabel.[Scheme ID] = @RecruitmentMethodSchemeID
 -- Join with OA Policy to check if the publication is part of Faculty Policy
-LEFT JOIN [Publication OA Policy] pOAPolicy
-	ON p.[ID] = pOAPolicy.[Publication ID] AND pOAPolicy.[OA Policy ID] = @OAFacultyPolicyID
+LEFT JOIN [Publication OA Scheme State] pOAPolicy
+	ON p.[ID] = pOAPolicy.[Publication ID] AND pOAPolicy.[OA Scheme ID] = @OAFacultyPolicyID
 -- Use the below line to filter by DSpace creation year. The value is set in a SSRS parameter
-WHERE YEAR(pRecord.[record-created-at-source-date]) &gt; @Start_Year
+WHERE YEAR(pRecord.[record-created-at-source-date]) &gt;= @Start_Year
 -- Consider only publications that are live in DSpace
 	AND  pRecord.[Publication Source ID] = @DSpaceSourceID
 	AND pRecord.[repository-status] = 'Public' </CommandText>
