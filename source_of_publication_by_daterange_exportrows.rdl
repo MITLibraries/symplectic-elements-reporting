@@ -25,6 +25,7 @@
 -- Source of Publication by User Supplied Date Range (carlj, modifying original SQL from Lucian Parau, 2022-07-12)
 -- Get start/end dates for query from user entered parameters: Date_1 and Date_2 (carlj, 2022-07-13)
 -- Allow export all retrieved rows (carlj, 2023-01-12)
+-- Find 'No Label' Records (records with unknown source of publication). 
 
 -- DECLARE THE NEEDED VARIABLES:
 
